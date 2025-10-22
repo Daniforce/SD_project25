@@ -4,18 +4,21 @@ import java.rmi.server.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-public class IndexServer extends UnicastRemoteObject implements Index {
+public class IndexServer extends UnicastRemoteObject implements Index 
+{
     private final Queue<String> urlsToIndex;
     private final Map<String, Set<String>> invertedIndex;
     private final Set<String> visitedUrls;
 
-    public IndexServer() throws RemoteException {
+    public IndexServer() throws RemoteException 
+    {
         urlsToIndex = new ConcurrentLinkedQueue<>();
         invertedIndex = new ConcurrentHashMap<>();
         visitedUrls = ConcurrentHashMap.newKeySet();
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception 
+    {
         IndexServer server = new IndexServer();
         String nome = args.length > 0 ? args[0] : "barrel1";
         Registry registry;
@@ -30,14 +33,19 @@ public class IndexServer extends UnicastRemoteObject implements Index {
         System.out.println("IndexServer " + nome + " pronto");
         System.out.println("IndexServer pronto");
 
-        try (Scanner sc = new Scanner(System.in)) {
-            while (true) {
+        try (Scanner sc = new Scanner(System.in)) 
+        {
+            while (true) 
+            {
                 System.out.println("1 - Add URL | 2 - Search");
                 String op = sc.nextLine();
-                if (op.equals("1")) {
+                if (op.equals("1")) 
+                {
                     System.out.print("URL: ");
                     server.putNew(sc.nextLine());
-                } else if (op.equals("2")) {
+                } 
+                else if (op.equals("2")) 
+                {
                     System.out.print("Word: ");
                     System.out.println(server.searchWord(sc.nextLine()));
                 }
@@ -52,7 +60,7 @@ public class IndexServer extends UnicastRemoteObject implements Index {
 
     @Override
     public void putNew(String url) throws RemoteException {
-        if (visitedUrls.add(url)) { // garante que nao é repetido
+        if (visitedUrls.add(url)) { 
             urlsToIndex.add(url);
         }
     }
